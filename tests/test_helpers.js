@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 const initialBlogs = [
   {
@@ -35,8 +36,23 @@ const nonExistingId = async () => {
   return blog._id.toString();
 };
 
+const userInDb = async () => {
+  const response = await User.find({});
+  return response.map((user) => user.toJSON());
+};
+
+const getTestToken = async (api) => {
+  const result = await api.post("/api/login").send({
+    username: "test",
+    password: "test",
+  });
+  return result.body.token;
+};
+
 module.exports = {
   initialBlogs,
   blogInDb,
   nonExistingId,
+  userInDb,
+  getTestToken,
 };
